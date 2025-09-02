@@ -1,0 +1,33 @@
+services:
+  - type: web
+    name: social-media-backend
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    plan: free
+    healthCheckPath: /swagger/index.html
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: social-media-db
+          property: connectionString
+      - key: DATABASE_DSN
+        fromDatabase:
+          name: social-media-db
+          property: connectionString
+      - key: REDIS_URL
+        fromService:
+          name: social-media-redis
+          type: redis
+          property: connectionString
+      - key: PORT
+        value: 3015
+
+  - type: pgsql
+    name: social-media-db
+    plan: free
+    ipAllowList: []
+
+  - type: redis
+    name: social-media-redis
+    plan: free
+    ipAllowList: []
