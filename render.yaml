@@ -1,0 +1,38 @@
+services:
+  - type: web
+    name: socio-backend
+    env: docker
+    dockerfilePath: ./Dockerfile
+    plan: free
+    healthCheckPath: /swagger/index.html
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: socio-postgres
+          property: connectionString
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: socio-redis
+          property: connectionString
+      - key: DATABASE_DSN
+        fromDatabase:
+          name: socio-postgres
+          property: connectionString
+      - key: PORT
+        value: 3015
+
+  - type: pserv
+    name: socio-postgres
+    env: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    disk:
+      name: postgres-data
+      mountPath: /var/lib/postgresql/data
+      sizeGB: 1
+
+  - type: redis
+    name: socio-redis
+    plan: free
+    maxmemoryPolicy: allkeys-lru
