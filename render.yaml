@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: social-media-backend
+    name: socio-backend
     runtime: docker
     dockerfilePath: ./Dockerfile
     plan: free
@@ -8,26 +8,26 @@ services:
     envVars:
       - key: DATABASE_URL
         fromDatabase:
-          name: social-media-db
+          name: socio-postgres
           property: connectionString
       - key: DATABASE_DSN
         fromDatabase:
-          name: social-media-db
+          name: socio-postgres
           property: connectionString
       - key: REDIS_URL
         fromService:
-          name: social-media-redis
+          name: socio-redis
           type: redis
           property: connectionString
       - key: PORT
         value: 3015
 
-  - type: pgsql
-    name: social-media-db
+  - type: redis
+    name: socio-redis
     plan: free
     ipAllowList: []
 
-  - type: redis
-    name: social-media-redis
-    plan: free
-    ipAllowList: []
+databases:
+  - name: socio-postgres
+    databaseName: socio
+    user: socio
