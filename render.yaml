@@ -17,12 +17,12 @@ services:
       - key: REDIS_URL
         fromService:
           name: socio-redis
-          type: redis
+          type: keyvalue
           property: connectionString
       - key: PORT
         value: 3015
 
-  - type: redis
+  - type: keyvalue
     name: socio-redis
     plan: free
     ipAllowList: []
@@ -31,3 +31,4 @@ databases:
   - name: socio-postgres
     databaseName: socio
     user: socio
+    plan: free
